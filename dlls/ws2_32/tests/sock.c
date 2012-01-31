@@ -4236,6 +4236,12 @@ static void test_getaddrinfo(void)
     pfreeaddrinfo(result);
 
     result = NULL;
+    ret = pgetaddrinfo(NULL, "", NULL, &result);
+    ok(!ret, "getaddrinfo failed with %d\n", WSAGetLastError());
+    ok(result != NULL, "getaddrinfo failed\n");
+    pfreeaddrinfo(result);
+
+    result = NULL;
     ret = pgetaddrinfo(NULL, "0", NULL, &result);
     ok(!ret, "getaddrinfo failed with %d\n", WSAGetLastError());
     ok(result != NULL, "getaddrinfo failed\n");

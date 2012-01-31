@@ -4824,7 +4824,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
     int   result;
     struct addrinfo unixhints, *punixhints = NULL;
     char *hostname = NULL;
-    const char *node;
+    const char *node, *serv;
 
     if (!nodename && !servname) return WSAHOST_NOT_FOUND;
 
@@ -4837,6 +4837,11 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
     }
     else
         node = nodename;
+
+    if (!nodename && !servname[0])
+        serv = "0";
+    else
+        serv = servname;
 
     if (hints) {
         punixhints = &unixhints;
@@ -4858,7 +4863,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
     }
 
     /* getaddrinfo(3) is thread safe, no need to wrap in CS */
-    result = getaddrinfo(node, servname, punixhints, &unixaires);
+    result = getaddrinfo(node, serv, punixhints, &unixaires);
 
     TRACE("%s, %s %p -> %p %d\n", debugstr_a(nodename), debugstr_a(servname), hints, res, result);
     HeapFree(GetProcessHeap(), 0, hostname);
