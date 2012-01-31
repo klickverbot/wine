@@ -4802,10 +4802,11 @@ static char *get_hostname(void)
     char *ret;
     DWORD size = 0;
 
-    GetComputerNameExA( ComputerNamePhysicalDnsHostname, NULL, &size );
+    /* FQDN because the host part alone does not resolve on OS X by default. */
+    GetComputerNameExA( ComputerNamePhysicalDnsFullyQualified, NULL, &size );
     if (GetLastError() != ERROR_MORE_DATA) return NULL;
     if (!(ret = HeapAlloc( GetProcessHeap(), 0, size ))) return NULL;
-    if (!GetComputerNameExA( ComputerNamePhysicalDnsHostname, ret, &size ))
+    if (!GetComputerNameExA( ComputerNamePhysicalDnsFullyQualified, ret, &size ))
     {
         HeapFree( GetProcessHeap(), 0, ret );
         return NULL;
