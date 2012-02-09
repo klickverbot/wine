@@ -4830,10 +4830,7 @@ int WINAPI WS_getaddrinfo(LPCSTR nodename, LPCSTR servname, const struct WS_addr
     if (!nodename)
         node = NULL;
     else if (!nodename[0])
-    {
-        node = hostname = get_hostname();
-        if (!node) return WSA_NOT_ENOUGH_MEMORY;
-    }
+        node = "localhost";
     else
         node = nodename;
 
